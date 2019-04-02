@@ -1,4 +1,9 @@
-const { topicsData } = require('../data');
+const {
+  topicsData,
+  usersData,
+  articlesData,
+  commentsData,
+} = require('../data');
 
 exports.seed = (connection, Promise) => {
   return connection.migrate
@@ -9,6 +14,12 @@ exports.seed = (connection, Promise) => {
       return connection
         .insert(topicsData)
         .into('topics')
+        .returning('*');
+    })
+    .then(() => {
+      return connection
+        .insert(usersData)
+        .into('users')
         .returning('*');
     });
 };
