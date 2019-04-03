@@ -1,7 +1,11 @@
 const { expect } = require('chai');
 const request = require('supertest');
 const app = require('../app');
-const { reformatTimestamp, changeKeyName } = require('../utils/utils');
+const {
+  reformatTimestamp,
+  changeKeyName,
+  convertData,
+} = require('../utils/utils');
 
 describe('reformatTimestamp', () => {
   it('', () => {
@@ -24,5 +28,32 @@ describe('changeKeyName', () => {
     expect(changeKeyName(dataArray, oldKeyName, newKeyName)).to.eql([
       { new_key: 42 },
     ]);
+  });
+});
+
+describe.only('convertData', () => {
+  it('', () => {
+    const arr1 = [];
+    const key1 = 'keyA';
+    const arr2 = [];
+    const key2 = 'keyB';
+    const result = [];
+    expect(convertData(arr1, key1, arr2, key2)).to.eql(result);
+  });
+  it('', () => {
+    const arr1 = [{ keyA: 42 }];
+    const key1 = 'keyA';
+    const arr2 = [{ keyA: 42, keyB: 'hello' }];
+    const key2 = 'keyB';
+    const result = [{ keyB: 'hello' }];
+    expect(convertData(arr1, key1, arr2, key2)).to.eql(result);
+  });
+  it('', () => {
+    const arr1 = [{ keyA: 42, keyC: 'world' }];
+    const key1 = 'keyA';
+    const arr2 = [{ keyA: 42, keyB: 'hello' }];
+    const key2 = 'keyB';
+    const result = [{ keyB: 'hello', keyC: 'world' }];
+    expect(convertData(arr1, key1, arr2, key2)).to.eql(result);
   });
 });

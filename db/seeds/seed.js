@@ -29,22 +29,30 @@ exports.seed = (connection, Promise) => {
         .returning('*');
     })
     .then(() => {
+      const formattedArticlesData = reformatTimestamp(
+        articlesData,
+        'created_at'
+      );
       return connection
-        .insert(reformatTimestamp(articlesData, 'created_at'))
+        .insert(formattedArticlesData)
         .into('articles')
         .returning('*');
     })
-    .then(() => {
+    .then((formattedArticlesData) => {
       const formattedCommentsData = reformatTimestamp(
         commentsData,
         'created_at'
       );
       changeKeyName(formattedCommentsData, 'belongs_to', 'title');
-      convertData(formattedCommentsData, 'title', articlesData, 'article_id');
+      convertData(
+        formattedCommentsData,
+        'title',
+        formattedArticlesData,
+        'article_id'
+      );
       return connection
         .insert(formattedCommentsData)
         .into('comments')
-        .returning('*')
-        .then(console.log(commentsData));
+        .returning('*');
     });
 };

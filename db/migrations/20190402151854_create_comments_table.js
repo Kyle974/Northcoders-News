@@ -5,10 +5,10 @@ exports.up = function(connection, Promise) {
       .string('created_by')
       .references('username')
       .inTable('users');
-    // commentsTable
-    //   .integer('article_id')
-    //   .references('article_id')
-    //   .inTable('articles');
+    commentsTable
+      .integer('article_id')
+      .references('article_id')
+      .inTable('articles');
     commentsTable
       .string('belongs_to')
       .references('title')

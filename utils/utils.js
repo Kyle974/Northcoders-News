@@ -27,9 +27,10 @@ const convertData = (dataArray1, objectKey1, dataArray2, objectKey2) => {
   const convertedDataArray = [...dataArray1];
   for (let i = 0; i < convertedDataArray.length; i++) {
     const matchedData = dataArray2.find(
-      (data) => data[objectKey2] === dataArray1[objectKey1]
+      (data) => data[objectKey1] === convertedDataArray[i][objectKey1]
     );
-    convertedDataArray[objectKey2] = matchedData;
+    convertedDataArray[i][objectKey2] = matchedData[objectKey2];
+    delete convertedDataArray[i][objectKey1];
   }
   return convertedDataArray;
 };
