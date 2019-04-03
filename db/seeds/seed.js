@@ -36,7 +36,8 @@ exports.seed = (connection, Promise) => {
       return connection
         .insert(formattedArticlesData)
         .into('articles')
-        .returning('*');
+        .returning('*')
+        .then(console.log(formattedArticlesData));
     })
     .then((formattedArticlesData) => {
       const formattedCommentsData = reformatTimestamp(
@@ -54,7 +55,6 @@ exports.seed = (connection, Promise) => {
       return connection
         .insert(formattedCommentsData)
         .into('comments')
-        .returning('*')
-        .then(console.log(formattedCommentsData));
+        .returning('*');
     });
 };
