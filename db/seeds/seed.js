@@ -50,9 +50,11 @@ exports.seed = (connection, Promise) => {
         formattedArticlesData,
         'article_id'
       );
+      changeKeyName(formattedCommentsData, 'created_by', 'author');
       return connection
         .insert(formattedCommentsData)
         .into('comments')
-        .returning('*');
+        .returning('*')
+        .then(console.log(formattedCommentsData));
     });
 };
