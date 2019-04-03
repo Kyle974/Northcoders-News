@@ -31,7 +31,7 @@ describe('changeKeyName', () => {
   });
 });
 
-describe.only('convertData', () => {
+describe('convertData', () => {
   it('', () => {
     const arr1 = [];
     const key1 = 'keyA';

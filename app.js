@@ -8,8 +8,8 @@ app.use(express.json());
 
 app.use('/api', apiRouter);
 
-app.all('/*', routeNotFound);
+// app.all('/*', routeNotFound);
 
-app.use(handle500);
+// app.use(handle500);
 
 module.exports = app;
