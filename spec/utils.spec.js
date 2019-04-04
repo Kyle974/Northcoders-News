@@ -7,7 +7,7 @@ const {
   convertData,
 } = require('../utils/utils');
 
-describe('reformatTimestamp', () => {
+xdescribe('reformatTimestamp', () => {
   it('', () => {
     const input = [];
     const result = [];
@@ -31,7 +31,7 @@ describe('changeKeyName', () => {
   });
 });
 
-describe('convertData', () => {
+xdescribe('convertData', () => {
   it('', () => {
     const arr1 = [];
     const key1 = 'keyA';

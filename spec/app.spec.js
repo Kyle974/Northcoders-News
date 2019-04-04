@@ -6,12 +6,12 @@ const request = require('supertest');
 const app = require('../app');
 const connection = require('../db/connection');
 
-describe.only('/', () => {
+describe('/', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
   describe('/api', () => {
     describe('/users', () => {
-      it('get requests responds with status 200 and an array', () => {
+      it('get request responds with status 200 and an array', () => {
         return request(app)
           .get('/api/users')
           .expect(200)
@@ -26,7 +26,7 @@ describe.only('/', () => {
       });
     });
     describe('/topics', () => {
-      it('get requests responds with status 200 and an array', () => {
+      it('get request responds with status 200 and an array', () => {
         return request(app)
           .get('/api/topics')
           .expect(200)
@@ -36,8 +36,8 @@ describe.only('/', () => {
           });
       });
     });
-    describe('/articles', () => {
-      it('get requests responds with status 200 and an array', () => {
+    describe.only('/articles', () => {
+      it('get request responds with status 200 and an array of article data', () => {
         return request(app)
           .get('/api/articles')
           .expect(200)
@@ -46,17 +46,22 @@ describe.only('/', () => {
             expect(res.body.articles[0]).to.contain.keys('article_id', 'body');
           });
       });
-      it.only('get requests responds with status 200 and an object', () => {
+      it('get request responds with status 200 and an article data object', () => {
         return request(app)
           .get('/api/articles/1')
           .expect(200)
           .then((res) => {
-            expect(res.body.articles).to.contain.keys('article_id', 'body');
+            expect(res.body.article).to.contain.keys(
+              'article_id',
+              'body',
+              'topic',
+              'author'
+            );
           });
       });
     });
     describe('/comments', () => {
-      it('get requests responds with status 200 and an array', () => {
+      it('get request responds with status 200 and an array of comment data', () => {
         return request(app)
           .get('/api/comments')
           .expect(200)

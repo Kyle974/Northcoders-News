@@ -1,7 +1,21 @@
 const connection = require('../db/connection');
 
-exports.getArticles = (query) => {
-  const { article_id } = query;
+exports.getArticles = () => {
+  return connection
+    .select(
+      'article_id',
+      'title',
+      'body',
+      'votes',
+      'topic',
+      'author',
+      'created_at'
+    )
+    .from('articles');
+};
+
+exports.getArticleById = (params) => {
+  const { article_id } = params;
   return connection
     .select(
       'article_id',
@@ -13,9 +27,9 @@ exports.getArticles = (query) => {
       'created_at'
     )
     .from('articles')
-    .modify((articleQuery) => {
+    .modify((articleParam) => {
       if (article_id) {
-        articleQuery.where('article_id', '=', article_id);
+        articleParam.where('article_id', '=', article_id);
       }
     });
 };

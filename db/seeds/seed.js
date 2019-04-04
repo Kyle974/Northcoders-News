@@ -5,18 +5,13 @@ const {
   commentsData,
 } = require('../data');
 
-const {
-  reformatTimestamp,
-  changeKeyName,
-  convertData,
-} = require('../../utils/utils');
+const { formatCommentsData, formatArticlesData } = require('../../utils/utils');
 
 exports.seed = (connection, Promise) => {
   return connection.migrate
     .rollback()
     .then(() => connection.migrate.latest())
     .then(() => {
-      console.log('inserting data...');
       return connection
         .insert(topicsData)
         .into('topics')
@@ -29,28 +24,17 @@ exports.seed = (connection, Promise) => {
         .returning('*');
     })
     .then(() => {
-      const formattedArticlesData = reformatTimestamp(
-        articlesData,
-        'created_at'
-      );
+      const formattedArticlesData = formatArticlesData(articlesData);
       return connection
         .insert(formattedArticlesData)
         .into('articles')
         .returning('*');
     })
     .then((formattedArticlesData) => {
-      const formattedCommentsData = reformatTimestamp(
+      const formattedCommentsData = formatCommentsData(
         commentsData,
-        'created_at'
+        formattedArticlesData
       );
-      changeKeyName(formattedCommentsData, 'belongs_to', 'title');
-      convertData(
-        formattedCommentsData,
-        'title',
-        formattedArticlesData,
-        'article_id'
-      );
-      changeKeyName(formattedCommentsData, 'created_by', 'author');
       return connection
         .insert(formattedCommentsData)
         .into('comments')

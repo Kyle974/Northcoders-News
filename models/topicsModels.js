@@ -1,5 +1,5 @@
 const connection = require('../db/connection');
 
-exports.getTopics = (query) => {
+exports.getTopics = () => {
   return connection.select('*').from('topics');
 };

@@ -1,38 +1,31 @@
-// takes an array of objects as first arguement, the key of an JavaScript timestamp and converts those timestamps into PostgresSQL timestamptz format.
-
-const reformatTimestamp = (dataArray, timestampKey) => {
-  reformattedDataArray = [...dataArray];
-  for (let i = 0; i < reformattedDataArray.length; i++) {
-    reformattedDataArray[i][timestampKey] = new Date(
-      reformattedDataArray[i][timestampKey]
-    ).toUTCString();
+const formatArticlesData = (articlesData) => {
+  const formattedArticlesData = [];
+  for (let i = 0; i < articlesData.length; i++) {
+    const articleData = { ...articlesData[i] };
+    articleData.created_at = new Date(articleData.created_at).toUTCString();
+    formattedArticlesData.push(articleData);
   }
-  return reformattedDataArray;
+  return formattedArticlesData;
 };
 
-// takes array of objects as first arguement, the name of a key within those object as the second arguement, and the name that key is to be changed to.
-
-const changeKeyName = (dataArray, oldKeyName, newKeyName) => {
-  const newDataArray = [...dataArray];
-  for (let i = 0; i < newDataArray.length; i++) {
-    newDataArray[i][newKeyName] = newDataArray[i][oldKeyName];
-    delete newDataArray[i][oldKeyName];
-  }
-  return newDataArray;
-};
-
-//
-
-const convertData = (dataArray1, objectKey1, dataArray2, objectKey2) => {
-  const convertedDataArray = [...dataArray1];
-  for (let i = 0; i < convertedDataArray.length; i++) {
-    const matchedData = dataArray2.find(
-      (data) => data[objectKey1] === convertedDataArray[i][objectKey1]
+const formatCommentsData = (commentsData, articlesData) => {
+  const formattedCommentsData = [];
+  for (let i = 0; i < commentsData.length; i++) {
+    const commentData = { ...commentsData[i] };
+    commentData.author = commentData.created_by;
+    commentData.created_at = new Date(commentData.created_at).toUTCString();
+    formattedCommentsData.push(commentData);
+    const matchedData = articlesData.find(
+      (articleData) => articleData.title === commentData.belongs_to
     );
-    convertedDataArray[i][objectKey2] = matchedData[objectKey2];
-    delete convertedDataArray[i][objectKey1];
+    delete commentData.belongs_to;
+    delete commentData.created_by;
+    commentData.article_id = matchedData.article_id;
   }
-  return convertedDataArray;
+  return formattedCommentsData;
 };
 
-module.exports = { reformatTimestamp, changeKeyName, convertData };
+module.exports = {
+  formatArticlesData,
+  formatCommentsData,
+};
