@@ -1,6 +1,10 @@
 const connection = require('../db/connection');
 
-exports.getArticles = () => {
+exports.getArticles = (query) => {
+  const { author, topic } = query;
+  const sortBy = query.sortBy || 'created_at';
+  const sortDirection = query.order || 'desc';
+
   return connection
     .select(
       'article_id',
@@ -11,7 +15,16 @@ exports.getArticles = () => {
       'author',
       'created_at'
     )
-    .from('articles');
+    .from('articles')
+    .modify((articleQuery) => {
+      if (author) {
+        articleQuery.where({ author });
+      }
+      if (topic) {
+        articleQuery.where({ topic });
+      }
+    })
+    .orderBy(sortBy, sortDirection);
 };
 
 exports.getArticleById = (params) => {
@@ -49,4 +62,22 @@ exports.deleteArticleById = (params) => {
   return connection('articles')
     .where('article_id', '=', article_id)
     .del();
+};
+
+exports.getCommentsByArticleId = (params) => {
+  const { article_id } = params;
+  return connection
+    .select('*')
+    .from('comments')
+    .where('article_id', '=', article_id);
+};
+
+exports.postCommentByArticleId = (body, params) => {
+  return connection('comments')
+    .insert({
+      body: body.body,
+      author: body.author,
+      article_id: params.article_id,
+    })
+    .returning('*');
 };

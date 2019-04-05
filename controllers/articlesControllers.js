@@ -3,10 +3,14 @@ const {
   getArticleById,
   patchArticleById,
   deleteArticleById,
+  getCommentsByArticleId,
+  postCommentByArticleId,
 } = require('../models/articlesModels');
 
 exports.sendArticles = (req, res, next) => {
-  return getArticles().then((articles) => res.status(200).send({ articles }));
+  return getArticles(req.query).then((articles) =>
+    res.status(200).send({ articles })
+  );
 };
 
 exports.sendArticleById = (req, res, next) => {
@@ -28,4 +32,16 @@ exports.removeArticleById = (req, res, next) => {
       res.status(204).send(`Article ${req.params.article_id} deleted.`);
     })
     .catch((err) => console.log(err));
+};
+
+exports.sendCommentsByArticleId = (req, res, next) => {
+  return getCommentsByArticleId(req.params).then((comments) => {
+    res.status(200).send({ comments });
+  });
+};
+
+exports.addCommentByArticleId = (req, res, next) => {
+  return postCommentByArticleId(req.body, req.params).then(([comment]) => {
+    res.status(201).send({ comment });
+  });
 };
