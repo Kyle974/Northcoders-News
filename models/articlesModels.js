@@ -64,12 +64,15 @@ exports.deleteArticleById = (params) => {
     .del();
 };
 
-exports.getCommentsByArticleId = (params) => {
+exports.getCommentsByArticleId = (query, params) => {
   const { article_id } = params;
+  const sort_by = query.sort_by || 'created_at';
+  const order = query.order || 'desc';
   return connection
     .select('*')
     .from('comments')
-    .where('article_id', '=', article_id);
+    .where('article_id', '=', article_id)
+    .orderBy(sort_by, order);
 };
 
 exports.postCommentByArticleId = (body, params) => {

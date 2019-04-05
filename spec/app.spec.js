@@ -107,6 +107,41 @@ describe.only('/', () => {
               'votes',
               'author'
             );
+            expect(res.body.comments).to.be.descendingBy('created_at');
+          });
+      });
+      it('get request responds with status 200 and an array of comments related to specified article ID in ascending order of created_at', () => {
+        return request(app)
+          .get('/api/articles/1/comments?order=ascending')
+          .expect(200)
+          .then((res) => {
+            expect(res.body.comments).to.be.an('array');
+            expect(res.body.comments[0]).to.contain.keys(
+              'body',
+              'comment_id',
+              'created_at',
+              'article_id',
+              'votes',
+              'author'
+            );
+            expect(res.body.comments).to.be.ascendingBy('created_at');
+          });
+      });
+      it('get request responds with status 200 and an array of comments related to specified article ID in ascending order of created_at', () => {
+        return request(app)
+          .get('/api/articles/1/comments?sort_by=comment_id')
+          .expect(200)
+          .then((res) => {
+            expect(res.body.comments).to.be.an('array');
+            expect(res.body.comments[0]).to.contain.keys(
+              'body',
+              'comment_id',
+              'created_at',
+              'article_id',
+              'votes',
+              'author'
+            );
+            expect(res.body.comments).to.be.descendingBy('comment_id');
           });
       });
       it('post request responds with status 201 and the comment data object that has been posted', () => {
@@ -127,7 +162,7 @@ describe.only('/', () => {
             expect(res.body.comment.author).to.equal('butter_bridge');
           });
       });
-      it('patch request to upvote article by ID responds with status 200 and patched article', () => {
+      it('patch request to upvote article by ID, responds with status 200 and patched article', () => {
         return request(app)
           .patch('/api/articles/1')
           .send({ inc_votes: 13 })
@@ -142,14 +177,32 @@ describe.only('/', () => {
         .delete('/api/articles/1')
         .expect(204);
     });
-    describe('/comments', () => {
-      it('get request responds with status 200 and an array of comment data', () => {
+    describe.only('/comments/:comment_id', () => {
+      it('patch request to upvote comment by ID, responds with status 200 and patched comment', () => {
         return request(app)
-          .get('/api/comments')
+          .patch('/api/comments/2')
+          .send({ inc_votes: 7 })
           .expect(200)
           .then((res) => {
-            expect(res.body.comments).to.be.an('array');
-            expect(res.body.comments[0]).to.contain.keys('article_id', 'body');
+            expect(res.body.comment).to.contain.keys(
+              'article_id',
+              'body',
+              'created_at',
+              'votes',
+              'comment_id',
+              'author'
+            );
+            expect(res.body.comment.body).to.be.an('string');
+            expect(res.body.comment.votes).to.equal(21);
+            expect(res.body.comment.comment_id).to.equal(2);
+          });
+      });
+      it('delete request responds with status 204 and no content', () => {
+        return request(app)
+          .delete('/api/comments/1')
+          .expect(204)
+          .then((res) => {
+            console.log(res);
           });
       });
     });

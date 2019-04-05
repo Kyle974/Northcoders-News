@@ -35,7 +35,7 @@ exports.removeArticleById = (req, res, next) => {
 };
 
 exports.sendCommentsByArticleId = (req, res, next) => {
-  return getCommentsByArticleId(req.params).then((comments) => {
+  return getCommentsByArticleId(req.query, req.params).then((comments) => {
     res.status(200).send({ comments });
   });
 };
