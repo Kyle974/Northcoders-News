@@ -5,10 +5,10 @@ const articlesRouter = require('./articlesRouter');
 const commentsRouter = require('./commentsRouter');
 const { methodNotAllowed } = require('../errors');
 
-// apiRouter
-// .route('/')
-// .get((req, res) => res.send({ ok: true }))
-// .all(methodNotAllowed);
+apiRouter
+  .route('/')
+  .get((req, res) => res.send({ ok: true }))
+  .all(methodNotAllowed);
 
 apiRouter.use('/users', usersRouter);
 

@@ -20,7 +20,7 @@ xdescribe('reformatTimestamp', () => {
   });
 });
 
-describe('changeKeyName', () => {
+xdescribe('changeKeyName', () => {
   it('', () => {
     const dataArray = [{ old_key: 42 }];
     const newKeyName = 'new_key';

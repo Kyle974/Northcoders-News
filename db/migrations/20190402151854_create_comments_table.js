@@ -5,7 +5,8 @@ exports.up = function(connection, Promise) {
       .string('author')
       .references('username')
       .inTable('users')
-      .notNullable();
+      .notNullable()
+      .onDelete('CASCADE');
     commentsTable
       .integer('article_id')
       .references('article_id')

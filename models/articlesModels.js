@@ -5,17 +5,7 @@ exports.getArticles = (query) => {
   const sortBy = query.sortBy || 'created_at';
   const sortDirection = query.order || 'desc';
 
-  return connection
-    .select(
-      'article_id',
-      'title',
-      'body',
-      'votes',
-      'topic',
-      'author',
-      'created_at'
-    )
-    .from('articles')
+  return connection('articles')
     .modify((articleQuery) => {
       if (author) {
         articleQuery.where({ author });
@@ -24,36 +14,27 @@ exports.getArticles = (query) => {
         articleQuery.where({ topic });
       }
     })
-    .orderBy(sortBy, sortDirection);
+    .orderBy(sortBy, sortDirection)
+    .returning('*');
 };
 
 exports.getArticleById = (params) => {
   const { article_id } = params;
-  return connection
-    .select(
-      'article_id',
-      'title',
-      'body',
-      'votes',
-      'topic',
-      'author',
-      'created_at'
-    )
-    .from('articles')
+  return connection('articles')
     .modify((articleParam) => {
       if (article_id) {
         articleParam.where('article_id', '=', article_id);
       }
-    });
+    })
+    .returning('*');
 };
 
 exports.patchArticleById = (body, params) => {
   const { inc_votes } = body;
   const { article_id } = params;
-  return connection
+  return connection('articles')
     .where('article_id', '=', article_id)
     .increment('votes', inc_votes)
-    .from('articles')
     .returning('*');
 };
 
@@ -68,11 +49,10 @@ exports.getCommentsByArticleId = (query, params) => {
   const { article_id } = params;
   const sort_by = query.sort_by || 'created_at';
   const order = query.order || 'desc';
-  return connection
-    .select('*')
-    .from('comments')
+  return connection('comments')
     .where('article_id', '=', article_id)
-    .orderBy(sort_by, order);
+    .orderBy(sort_by, order)
+    .returning('*');
 };
 
 exports.postCommentByArticleId = (body, params) => {
