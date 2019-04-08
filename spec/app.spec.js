@@ -9,7 +9,7 @@ const request = require('supertest');
 const app = require('../app');
 const connection = require('../db/connection');
 
-describe.only('/', () => {
+describe('/', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
   describe('/api', () => {
@@ -71,13 +71,23 @@ describe.only('/', () => {
             expect(res.body.articles[2].topic).to.equal('mitch');
           });
       });
-      it('get request responds with status 200 and an array of article data in descending order of date', () => {
+      it('get request responds with status 200 and an array of article data in ascending order of date', () => {
         return request(app)
           .get('/api/articles?order=asc')
           .expect(200)
           .then((res) => {
             expect(res.body.articles).to.be.an('array');
             expect(res.body.articles).to.be.ascendingBy('created_at');
+          });
+      });
+      it('get request responds with status 200 and an array of article data in descending order of author', () => {
+        return request(app)
+          .get('/api/articles?sort_by=author')
+          .expect(200)
+          .then((res) => {
+            expect(res.body.articles).to.be.an('array');
+            expect(res.body.articles).to.be.descendingBy('author');
+            expect(res.body.articles[0].author).to.equal('rogersop');
           });
       });
       it('get request responds with status 200 and an article data object', () => {
@@ -95,7 +105,7 @@ describe.only('/', () => {
               'created_at',
               'title'
             );
-            expect(res.body.article.comment_count).to.equal(42);
+            expect(res.body.article.comment_count).to.equal(13);
           });
       });
       it('get request responds with status 200 and an array of comments related to specified article ID', () => {
@@ -211,21 +221,61 @@ describe.only('/', () => {
   });
 });
 
-describe('/', () => {
+describe.only('error handling', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
   describe('/api', () => {
-    describe('Route Not Found', () => {
+    describe.only('404 - Route Not Found', () => {
       it('get request for non-existant route responds with status 404 and a route not found error', () => {
         return request(app)
-          .get('/api/foo/bar')
+          .get('/api/foo')
           .expect(404)
           .then((res) => {
             expect(res.body.msg).to.equal('Route Not Found');
           });
       });
+      it('get request for non-existant route responds with status 404 and a route not found error', () => {
+        return request(app)
+          .get('/api/articles/1000')
+          .expect(404)
+          .then((res) => {
+            expect(res.body.msg).to.equal('Article Not Found');
+          });
+      });
+      it('get request for non-existant route responds with status 404 and a route not found error', () => {
+        return request(app)
+          .get('/api/articles/1000/comments')
+          .expect(404)
+          .then((res) => {
+            expect(res.body.msg).to.equal('Article Not Found');
+          });
+      });
+      it('delete request for non-existant route responds with status 404 and a route not found error', () => {
+        return request(app)
+          .delete('/api/articles/1000')
+          .expect(404)
+          .then((res) => {
+            expect(res.body.msg).to.equal('Article Not Found');
+          });
+      });
+      it('get request for articles by non-existant author responds with status 404 and an error', () => {
+        return request(app)
+          .get('/api/articles?author=not-an-author')
+          .expect(404)
+          .then((res) => {
+            expect(res.body.msg).to.equal('Articles Not Found');
+          });
+      });
+      it.only('get request for non-existant route responds with status 404 and a route not found error', () => {
+        return request(app)
+          .get('/api/articles/dog')
+          .expect(400)
+          .then((res) => {
+            expect(res.body.msg).to.equal('Bad Request');
+          });
+      });
     });
-    describe('Method Not Allowed', () => {
+    describe('405 - Method Not Allowed', () => {
       it('post request responds with status 405 and a method not allowed error message.', () => {
         return request(app)
           .post('/api/topics')
@@ -261,20 +311,8 @@ describe('/', () => {
             expect(res.body.msg).to.equal('Method Not Allowed');
           });
       });
-      it('get request responds with status 405 and a method not allowed error message.', () => {
-        return request(app)
-          .post('/api/topics')
-          .send({
-            slug: 'mySlug',
-            description: "I'm friends with Tom.",
-          })
-          .expect(405)
-          .then((res) => {
-            expect(res.body.msg).to.equal('Method Not Allowed');
-          });
-      });
     });
-    describe('/articles', () => {
+    describe('404 - Not Found', () => {
       it('get request responds with status 200 and an array of article data', () => {
         return request(app)
           .get('/api/articles')

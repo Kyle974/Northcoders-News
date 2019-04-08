@@ -10,6 +10,6 @@ commentsRouter
   .patch(upvoteCommentById)
   .delete(removeCommentById);
 
-// commentsRouter.all('/', methodNotAllowed);
+commentsRouter.all('/:comment_id', methodNotAllowed);
 
 module.exports = commentsRouter;

@@ -2,9 +2,8 @@ const connection = require('../db/connection');
 
 exports.getArticles = (query) => {
   const { author, topic } = query;
-  const sortBy = query.sortBy || 'created_at';
-  const sortDirection = query.order || 'desc';
-
+  const sort_by = query.sort_by || 'created_at';
+  const order = query.order || 'desc';
   return connection('articles')
     .modify((articleQuery) => {
       if (author) {
@@ -14,7 +13,7 @@ exports.getArticles = (query) => {
         articleQuery.where({ topic });
       }
     })
-    .orderBy(sortBy, sortDirection)
+    .orderBy(sort_by, order)
     .returning('*');
 };
 

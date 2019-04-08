@@ -8,13 +8,13 @@ exports.methodNotAllowed = (req, res) => {
 
 exports.handle404 = (err, req, res, next) => {
   if (err.code === 404) {
-    res.status(404).send({ msg: err.msg || 'Not found' });
+    res.status(404).send({ msg: err.msg || 'Not Found' });
   } else next(err);
 };
 
-exports.handle400 = (err, req, res, next) => {
-  const codes = ['23502'];
-};
+// exports.handle400 = (err, req, res, next) => {
+//   const codes = ['23502'];
+// };
 
 exports.handle500 = (err, req, res, next) => {
   res.status(500).send({ msg: 'Internal Server Error' });
