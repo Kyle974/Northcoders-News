@@ -266,9 +266,26 @@ describe.only('error handling', () => {
             expect(res.body.msg).to.equal('Articles Not Found');
           });
       });
-      it.only('get request for non-existant route responds with status 404 and a route not found error', () => {
+      it('get request for articles sorted by non-existant column responds with status 400 and a bad request error', () => {
+        return request(app)
+          .get('/api/articles?sort_by=not-a-column')
+          .expect(400)
+          .then((res) => {
+            expect(res.body.msg).to.equal('Bad Request');
+          });
+      });
+      it('get request for with non-integer parameter responds with status 400 and a bad request error', () => {
         return request(app)
           .get('/api/articles/dog')
+          .expect(400)
+          .then((res) => {
+            expect(res.body.msg).to.equal('Bad Request');
+          });
+      });
+      it('patch request for non-existant route responds with status 400 and a bad request error', () => {
+        return request(app)
+          .patch('/api/articles/1')
+          .send({ author: 'Bort' })
           .expect(400)
           .then((res) => {
             expect(res.body.msg).to.equal('Bad Request');
@@ -281,7 +298,7 @@ describe.only('error handling', () => {
           .post('/api/topics')
           .send({
             slug: 'mySlug',
-            description: "I'm friends with Tom.",
+            description: 'Top 8 friends.',
           })
           .expect(405)
           .then((res) => {

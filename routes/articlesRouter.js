@@ -7,7 +7,12 @@ const {
   sendCommentsByArticleId,
   addCommentByArticleId,
 } = require('../controllers/articlesControllers');
-const { methodNotAllowed } = require('../errors/index');
+const {
+  methodNotAllowed,
+  handle500,
+  handle404,
+  handle400,
+} = require('../errors/index');
 
 articlesRouter.route('/').get(sendArticles);
 
@@ -22,6 +27,10 @@ articlesRouter
   .get(sendCommentsByArticleId)
   .post(addCommentByArticleId);
 
-// articlesRouter.all('/', methodNotAllowed);
+articlesRouter.all('/', handle400);
+
+articlesRouter.all('/', methodNotAllowed);
+
+articlesRouter.all('/:article_id/comments', handle400);
 
 module.exports = articlesRouter;

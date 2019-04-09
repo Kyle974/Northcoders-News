@@ -32,6 +32,9 @@ exports.sendArticleById = (req, res, next) => {
 };
 
 exports.upvoteArticleById = (req, res, next) => {
+  // if (typeof req.params !== 'number') {
+  //   return Promise.reject({ code: 405, msg: 'Method Not Allowed' });
+  // }
   return patchArticleById(req.body, req.params)
     .then(([article]) => {
       if (article === undefined)
