@@ -32,11 +32,14 @@ exports.sendArticleById = (req, res, next) => {
 };
 
 exports.upvoteArticleById = (req, res, next) => {
-  // if (typeof req.params !== 'number') {
-  //   return Promise.reject({ code: 405, msg: 'Method Not Allowed' });
-  // }
+  console.log(req.body);
+  // if (Object.keys(req.body).length !== 1)
+
   return patchArticleById(req.body, req.params)
     .then(([article]) => {
+      if (Object.keys(req.body).length === 1)
+        console.log('reaching this point!!!!!');
+      return Promise.reject({ code: 405, msg: 'Method Not Allowed' });
       if (article === undefined)
         return Promise.reject({ code: 404, msg: 'Article Not Found' });
       else res.status(200).send({ article });

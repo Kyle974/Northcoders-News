@@ -5,6 +5,7 @@ const {
   handle500,
   handle404,
   handle400,
+  methodNotAllowed,
 } = require('./errors/index');
 
 const app = express();
@@ -18,6 +19,8 @@ app.use(handle400);
 app.use(handle404);
 
 app.use(handle500);
+
+app.use(methodNotAllowed);
 
 app.all('/*', routeNotFound);
 
