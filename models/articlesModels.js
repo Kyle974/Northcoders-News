@@ -4,7 +4,12 @@ exports.getArticles = (query) => {
   const { author, topic } = query;
   const sort_by = query.sort_by || 'created_at';
   const order = query.order || 'desc';
-  return connection('articles')
+  return connection
+    .select('articles.*')
+    .from('articles')
+    .leftJoin('comments', 'comments.article_id', 'articles.article_id')
+    .groupBy('articles.article_id')
+    .count('comments.comment_id as comment_count')
     .modify((articleQuery) => {
       if (author) {
         articleQuery.where({ author });
@@ -13,23 +18,26 @@ exports.getArticles = (query) => {
         articleQuery.where({ topic });
       }
     })
-    .orderBy(sort_by, order)
-    .returning('*');
+    .orderBy(sort_by, order);
 };
 
 exports.getArticleById = (params) => {
   const { article_id } = params;
-  return connection('articles')
+  return connection
+    .select('articles.*')
+    .from('articles')
+    .leftJoin('comments', 'comments.article_id', 'articles.article_id')
+    .groupBy('articles.article_id')
+    .count('comments.comment_id as comment_count')
     .modify((articleParam) => {
       if (article_id) {
-        articleParam.where('article_id', '=', article_id);
+        articleParam.where('articles.article_id', '=', article_id);
       }
-    })
-    .returning('*');
+    });
 };
 
 exports.patchArticleById = (body, params) => {
-  const { inc_votes } = body;
+  const inc_votes = body.inc_votes || 0;
   const { article_id } = params;
   return connection('articles')
     .where('article_id', '=', article_id)

@@ -105,7 +105,7 @@ describe('/', () => {
               'created_at',
               'title'
             );
-            expect(res.body.article.comment_count).to.equal(13);
+            expect(res.body.article.comment_count).to.equal('13');
           });
       });
       it('get request responds with status 200 and an array of comments related to specified article ID', () => {
@@ -225,13 +225,14 @@ describe.only('error handling', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
   describe('/api', () => {
-    describe('404 - Route Not Found', () => {
-      it('get request for non-existant route responds with status 404 and a route not found error', () => {
+    describe('', () => {
+      xit('patch request responds with status 405 and a method not allowed error', () => {
         return request(app)
-          .get('/api/foo')
-          .expect(404)
+          .patch('/api/topics/')
+          .send({ something: 'something' })
+          .expect(405)
           .then((res) => {
-            expect(res.body.msg).to.equal('Route Not Found');
+            expect(res.body.msg).to.equal('Method Not Allowed');
           });
       });
       it('get request for non-existant route responds with status 404 and a route not found error', () => {
@@ -263,7 +264,7 @@ describe.only('error handling', () => {
           .get('/api/articles?author=not-an-author')
           .expect(404)
           .then((res) => {
-            expect(res.body.msg).to.equal('Articles Not Found');
+            expect(res.body.msg).to.equal('Not Found');
           });
       });
       it('get request for articles sorted by non-existant column responds with status 400 and a bad request error', () => {
@@ -282,30 +283,29 @@ describe.only('error handling', () => {
             expect(res.body.msg).to.equal('Bad Request');
           });
       });
-      it('patch request for non-existant route responds with status 400 and a bad request error', () => {
+      it('patch request responds with status 405 and a bad request error', () => {
         return request(app)
           .patch('/api/articles/1')
           .send({ author: 'Bort' })
-          .expect(400)
+          .expect(405)
           .then((res) => {
-            expect(res.body.msg).to.equal('Bad Request');
+            expect(res.body.msg).to.equal('Method Not Allowed');
           });
       });
     });
     describe('405 - Method Not Allowed', () => {
-      it('post request responds with status 405 and a method not allowed error message.', () => {
+      xit('patch request responds with status 405 and a method not allowed error message.', () => {
         return request(app)
-          .post('/api/topics')
+          .patch('/api/topics')
           .send({
             slug: 'mySlug',
-            description: 'Top 8 friends.',
           })
           .expect(405)
           .then((res) => {
             expect(res.body.msg).to.equal('Method Not Allowed');
           });
       });
-      it('patch request responds with status 405 and a method not allowed error message.', () => {
+      xit('patch request responds with status 405 and a method not allowed error message.', () => {
         return request(app)
           .patch('/api/users/butter_bridge')
           .send({
@@ -316,7 +316,7 @@ describe.only('error handling', () => {
             expect(res.body.msg).to.equal('Method Not Allowed');
           });
       });
-      it('get request responds with status 400 and a bad request error message.', () => {
+      it('get request responds with status 405 and a method not allowed error message.', () => {
         return request(app)
           .patch('/api/articles/1')
           .send({

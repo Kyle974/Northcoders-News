@@ -1,10 +1,3 @@
-exports.methodNotAllowed = (err, req, res, next) => {
-  console.log('405 block reached!');
-  if (err.code === 405) {
-    res.status(405).send({ msg: err.msg || 'Method Not Allowed' });
-  }
-};
-
 exports.handle400 = (err, req, res, next) => {
   console.log(err.code);
   console.log('400 block reached!');
@@ -15,16 +8,34 @@ exports.handle400 = (err, req, res, next) => {
 };
 
 exports.handle404 = (err, req, res, next) => {
+  console.log(err.code);
   console.log('404 block reached!');
-  if (err.code === 404) {
+  if (err.code === 404 || 42702) {
     res.status(404).send({ msg: err.msg || 'Not Found' });
   } else next(err);
 };
 
+exports.handle405 = (err, req, res, next) => {
+  console.log(err.code);
+  console.log('405 block reached!');
+  if (err.code === 405) {
+    res.status(405).send({ msg: err.msg || 'Method Not Allowed' });
+  } else next(err);
+};
+
+exports.methodNotAllowed = (req, res) => {
+  console.log(err.code);
+  console.log('methNotAllowed block reached!');
+  res.status(405).send({ msg: err.msg || 'Method Not Allowed' });
+};
+
 exports.routeNotFound = (req, res) => {
+  console.log(err.code);
+  console.log('routeNotFound block reached!');
   res.status(404).send({ msg: 'Route Not Found' });
 };
 
 exports.handle500 = (err, req, res, next) => {
+  console.log(err.code);
   res.status(500).send({ msg: 'Internal Server Error' });
 };
