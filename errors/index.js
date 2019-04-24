@@ -24,13 +24,11 @@ exports.handle405 = (err, req, res, next) => {
 };
 
 exports.methodNotAllowed = (req, res) => {
-  console.log(err.code);
   console.log('methNotAllowed block reached!');
   res.status(405).send({ msg: err.msg || 'Method Not Allowed' });
 };
 
 exports.routeNotFound = (req, res) => {
-  console.log(err.code);
   console.log('routeNotFound block reached!');
   res.status(404).send({ msg: 'Route Not Found' });
 };
