@@ -3,7 +3,7 @@ const usersRouter = require('./usersRouter');
 const topicsRouter = require('./topicsRouter');
 const articlesRouter = require('./articlesRouter');
 const commentsRouter = require('./commentsRouter');
-const { methodNotAllowed, handle405 } = require('../errors/index');
+const { methodNotAllowed } = require('../errors/index');
 
 apiRouter.use('/users', usersRouter).all(methodNotAllowed);
 

@@ -36,6 +36,5 @@ exports.routeNotFound = (req, res) => {
 };
 
 exports.handle500 = (err, req, res, next) => {
-  console.log(err.code);
   res.status(500).send({ msg: 'Internal Server Error' });
 };

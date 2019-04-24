@@ -305,7 +305,7 @@ describe.only('error handling', () => {
             expect(res.body.msg).to.equal('Method Not Allowed');
           });
       });
-      xit('patch request responds with status 405 and a method not allowed error message.', () => {
+      it('patch request responds with status 405 and a method not allowed error message.', () => {
         return request(app)
           .patch('/api/users/butter_bridge')
           .send({
