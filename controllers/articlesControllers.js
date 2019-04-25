@@ -10,7 +10,7 @@ const {
 exports.sendArticles = (req, res, next) => {
   return getArticles(req.query)
     .then((articles) => {
-      console.log(articles);
+      articles;
       if (articles.length === 0) {
         return Promise.reject({
           code: 404,
@@ -25,7 +25,6 @@ exports.sendArticles = (req, res, next) => {
 exports.sendArticleById = (req, res, next) => {
   return getArticleById(req.params)
     .then(([article]) => {
-      console.log(article);
       if (article === undefined)
         return Promise.reject({ code: 404, msg: 'Article Not Found' });
       else res.status(200).send({ article });
@@ -40,7 +39,6 @@ exports.upvoteArticleById = (req, res, next) => {
         Object.keys(req.body).length !== 1 ||
         req.body.inc_votes === undefined
       ) {
-        console.log('reaching this point!!!!!');
         return Promise.reject({ code: 405, msg: 'Method Not Allowed' });
       }
       if (article === undefined)

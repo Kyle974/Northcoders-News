@@ -1,13 +1,14 @@
 const connection = require('../db/connection');
 
 exports.getUser = (params) => {
-  const { user } = params;
+  const { username } = params;
   return connection
     .select('*')
     .from('users')
     .modify((userParam) => {
-      if (user) {
-        userParam.where('username', '=', user);
+      if (username) {
+        userParam.where('username', '=', username);
       }
-    });
+    })
+    .then(console.log(username));
 };

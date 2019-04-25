@@ -9,7 +9,7 @@ const request = require('supertest');
 const app = require('../app');
 const connection = require('../db/connection');
 
-describe('/', () => {
+describe.only('/', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
   describe('/api', () => {
@@ -20,6 +20,45 @@ describe('/', () => {
           .expect(200)
           .then((res) => {
             expect(res.body.user).to.be.an('object');
+            expect(res.body.user).to.contain.keys(
+              'name',
+              'username',
+              'avatar_url'
+            );
+          });
+      });
+      it.only('get request responds with status 200 and a user data object', () => {
+        return request(app)
+          .get('/api/users/butter_bridge')
+          .expect(200)
+          .then((res) => {
+            expect(res.body.user.username).to.equal('butter_bridge');
+            expect(res.body.user).to.contain.keys(
+              'name',
+              'username',
+              'avatar_url'
+            );
+          });
+      });
+      it.only('get request responds with status 200 and a user data object', () => {
+        return request(app)
+          .get('/api/users/rogersop')
+          .expect(200)
+          .then((res) => {
+            expect(res.body.user.username).to.equal('rogersop');
+            expect(res.body.user).to.contain.keys(
+              'name',
+              'username',
+              'avatar_url'
+            );
+          });
+      });
+      it.only('get request responds with status 200 and a user data object', () => {
+        return request(app)
+          .get('/api/users/icellusedkars')
+          .expect(200)
+          .then((res) => {
+            expect(res.body.user.username).to.equal('icellusedkars');
             expect(res.body.user).to.contain.keys(
               'name',
               'username',
@@ -221,7 +260,7 @@ describe('/', () => {
   });
 });
 
-describe.only('error handling', () => {
+describe('error handling', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
   describe('/api', () => {
