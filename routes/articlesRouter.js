@@ -7,27 +7,24 @@ const {
   sendCommentsByArticleId,
   addCommentByArticleId,
 } = require('../controllers/articlesControllers');
-const { methodNotAllowed, handle405 } = require('../errors/index');
+const { methodNotAllowed } = require('../errors/index');
 
 articlesRouter
   .route('/')
   .get(sendArticles)
-  .all(methodNotAllowed)
-  .all(handle405);
+  .all(methodNotAllowed);
 
 articlesRouter
   .route('/:article_id')
   .get(sendArticleById)
   .patch(upvoteArticleById)
   .delete(removeArticleById)
-  .all(methodNotAllowed)
-  .all(handle405);
+  .all(methodNotAllowed);
 
 articlesRouter
   .route('/:article_id/comments')
   .get(sendCommentsByArticleId)
   .post(addCommentByArticleId)
-  .all(methodNotAllowed)
-  .all(handle405);
+  .all(methodNotAllowed);
 
 module.exports = articlesRouter;
