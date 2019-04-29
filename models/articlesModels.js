@@ -12,7 +12,7 @@ exports.getArticles = (query) => {
     .count('comments.comment_id as comment_count')
     .modify((articleQuery) => {
       if (author) {
-        articleQuery.where({ author });
+        articleQuery.where('articles.author', '=', author);
       }
       if (topic) {
         articleQuery.where({ topic });

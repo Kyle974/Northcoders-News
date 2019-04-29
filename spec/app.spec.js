@@ -9,7 +9,7 @@ const request = require('supertest');
 const app = require('../app');
 const connection = require('../db/connection');
 
-describe.only('/', () => {
+describe('/', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
   describe('/api', () => {
@@ -20,19 +20,8 @@ describe.only('/', () => {
           .expect(200)
           .then((res) => {
             expect(res.body.user).to.be.an('object');
-            expect(res.body.user).to.contain.keys(
-              'name',
-              'username',
-              'avatar_url'
-            );
-          });
-      });
-      it('get request responds with status 200 and a user data object', () => {
-        return request(app)
-          .get('/api/users/butter_bridge')
-          .expect(200)
-          .then((res) => {
             expect(res.body.user.username).to.equal('butter_bridge');
+            expect(res.body.user.name).to.equal('jonny');
             expect(res.body.user).to.contain.keys(
               'name',
               'username',
@@ -45,7 +34,9 @@ describe.only('/', () => {
           .get('/api/users/rogersop')
           .expect(200)
           .then((res) => {
+            expect(res.body.user).to.be.an('object');
             expect(res.body.user.username).to.equal('rogersop');
+            expect(res.body.user.name).to.equal('paul');
             expect(res.body.user).to.contain.keys(
               'name',
               'username',
@@ -58,7 +49,9 @@ describe.only('/', () => {
           .get('/api/users/icellusedkars')
           .expect(200)
           .then((res) => {
+            expect(res.body.user).to.be.an('object');
             expect(res.body.user.username).to.equal('icellusedkars');
+            expect(res.body.user.name).to.equal('sam');
             expect(res.body.user).to.contain.keys(
               'name',
               'username',
@@ -144,6 +137,8 @@ describe.only('/', () => {
               'created_at',
               'title'
             );
+            expect(res.body.article.article_id).to.equal(1);
+            expect(res.body.article.body).to.be.a('string');
             expect(res.body.article.comment_count).to.equal('13');
           });
       });
@@ -265,7 +260,7 @@ describe('error handling', () => {
   after(() => connection.destroy());
   describe('/api', () => {
     describe('', () => {
-      xit('patch request responds with status 405 and a method not allowed error', () => {
+      it('patch request responds with status 405 and a method not allowed error', () => {
         return request(app)
           .patch('/api/topics/')
           .send({ something: 'something' })
@@ -332,8 +327,17 @@ describe('error handling', () => {
           });
       });
     });
+    it('post request from invalid user responds with status 404 and error message', () => {
+      return request(app)
+        .post('/api/articles/1/comments')
+        .send({
+          body: 'this is the comment body',
+          author: 'not-an-author',
+        })
+        .expect(404);
+    });
     describe('405 - Method Not Allowed', () => {
-      xit('patch request responds with status 405 and a method not allowed error message.', () => {
+      it('patch request responds with status 405 and a method not allowed error message.', () => {
         return request(app)
           .patch('/api/topics')
           .send({
