@@ -84,13 +84,13 @@ exports.addCommentByArticleId = (req, res, next) => {
         console.log('FAILING!!!!!!!!!!!!!!');
         return Promise.reject({ code: 404, msg: 'Article Not Found' });
       } else {
-        console.log('SOMETHINGS HAPPENING HERE!!!!!!!!!')
+        console.log('SOMETHINGS HAPPENING HERE!!!!!!!!!');
         return postCommentByArticleId(req.body, req.params).then(
           ([comment]) => {
             res.status(201).send({ comment });
           }
-          }
         );
+      }
     })
     .catch(next);
 };
