@@ -2,7 +2,7 @@ const connection = require('../db/connection');
 
 exports.patchComment = (body, params) => {
   const { comment_id } = params;
-  const { inc_votes } = body;
+  const inc_votes = body.inc_votes || 0;
   return connection
     .where('comment_id', '=', comment_id)
     .increment('votes', inc_votes)

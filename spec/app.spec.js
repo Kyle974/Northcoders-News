@@ -27,7 +27,7 @@ describe.only('/', () => {
             );
           });
       });
-      it.only('get request responds with status 200 and a user data object', () => {
+      it('get request responds with status 200 and a user data object', () => {
         return request(app)
           .get('/api/users/butter_bridge')
           .expect(200)
@@ -40,7 +40,7 @@ describe.only('/', () => {
             );
           });
       });
-      it.only('get request responds with status 200 and a user data object', () => {
+      it('get request responds with status 200 and a user data object', () => {
         return request(app)
           .get('/api/users/rogersop')
           .expect(200)
@@ -53,7 +53,7 @@ describe.only('/', () => {
             );
           });
       });
-      it.only('get request responds with status 200 and a user data object', () => {
+      it('get request responds with status 200 and a user data object', () => {
         return request(app)
           .get('/api/users/icellusedkars')
           .expect(200)

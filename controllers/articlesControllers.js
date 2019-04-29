@@ -79,9 +79,11 @@ exports.sendCommentsByArticleId = (req, res, next) => {
 exports.addCommentByArticleId = (req, res, next) => {
   return getArticleById(req.params)
     .then(([article]) => {
-      if (article === undefined)
+      if (article === undefined) {
+        console.log(article);
+        console.log('FAILING!!!!!!!!!!!!!!');
         return Promise.reject({ code: 404, msg: 'Article Not Found' });
-      else
+      } else
         return postCommentByArticleId(req.body, req.params).then(
           ([comment]) => {
             res.status(201).send({ comment });
