@@ -332,7 +332,7 @@ describe('error handling', () => {
         .post('/api/articles/1/comments')
         .send({
           body: 'this is the comment body',
-          author: 'not-an-author',
+          author: 'not-an-author'
         })
         .expect(404);
     });
@@ -341,7 +341,7 @@ describe('error handling', () => {
         return request(app)
           .patch('/api/topics')
           .send({
-            slug: 'mySlug',
+            slug: 'mySlug'
           })
           .expect(405)
           .then((res) => {
@@ -352,7 +352,7 @@ describe('error handling', () => {
         return request(app)
           .patch('/api/users/butter_bridge')
           .send({
-            username: 'butter_bean',
+            username: 'butter_bean'
           })
           .expect(405)
           .then((res) => {
@@ -364,7 +364,7 @@ describe('error handling', () => {
           .patch('/api/articles/1')
           .send({
             author: 'butter_bean',
-            title: 'i made this!',
+            title: 'i made this!'
           })
           .expect(405)
           .then((res) => {
@@ -372,5 +372,28 @@ describe('error handling', () => {
           });
       });
     });
+  });
+});
+
+describe('', () => {
+  beforeEach(() => connection.seed.run());
+  after(() => connection.destroy());
+  it.only('get request responds with status 200 and an array of article data sorted by votes', () => {
+    return request(app)
+      .get('/api/articles/?sort_by=votes')
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).to.be.an('array');
+        expect(res.body.articles[0]).to.contain.keys('article_id', 'body');
+      });
+  });
+  it.only('get request responds with status 200 and an array of article data sorted by comment count', () => {
+    return request(app)
+      .get('/api/articles/?sort_by=comment_count')
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).to.be.an('array');
+        expect(res.body.articles[0]).to.contain.keys('article_id', 'body');
+      });
   });
 });

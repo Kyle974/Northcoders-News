@@ -1,5 +1,6 @@
 exports.handle400 = (err, req, res, next) => {
   console.log(err.code);
+  console.log(err);
   console.log('400 block reached!');
   const errorCodes = ['23502', '22P02', '42703'];
   if (errorCodes.includes(err.code)) {

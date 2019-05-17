@@ -10,6 +10,7 @@ exports.getArticles = (query) => {
     .leftJoin('comments', 'comments.article_id', 'articles.article_id')
     .groupBy('articles.article_id')
     .count('comments.comment_id as comment_count')
+    .orderBy(sort_by, order)
     .modify((articleQuery) => {
       if (author) {
         articleQuery.where('articles.author', '=', author);
@@ -17,8 +18,7 @@ exports.getArticles = (query) => {
       if (topic) {
         articleQuery.where({ topic });
       }
-    })
-    .orderBy(sort_by, order);
+    });
 };
 
 exports.getArticleById = (params) => {
@@ -67,7 +67,7 @@ exports.postCommentByArticleId = (body, params) => {
     .insert({
       body: body.body,
       author: body.author,
-      article_id: params.article_id,
+      article_id: params.article_id
     })
     .returning('*');
 };

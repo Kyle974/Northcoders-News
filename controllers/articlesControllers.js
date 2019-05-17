@@ -4,17 +4,18 @@ const {
   patchArticleById,
   deleteArticleById,
   getCommentsByArticleId,
-  postCommentByArticleId,
+  postCommentByArticleId
 } = require('../models/articlesModels');
 
 exports.sendArticles = (req, res, next) => {
+  console.log(req.query);
   return getArticles(req.query)
     .then((articles) => {
       articles;
       if (articles.length === 0) {
         return Promise.reject({
           code: 404,
-          msg: 'Articles Not Found',
+          msg: 'Articles Not Found'
         });
       }
       res.status(200).send({ articles });

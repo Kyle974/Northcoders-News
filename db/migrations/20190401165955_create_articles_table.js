@@ -20,7 +20,6 @@ exports.up = function(connection, Promise) {
       .notNullable()
       .onDelete('CASCADE');
     articlesTable.timestamp('created_at').defaultTo(connection.fn.now());
-    articlesTable.integer('comment_count').defaultTo(0);
   });
 };
 
