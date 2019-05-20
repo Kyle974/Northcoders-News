@@ -379,14 +379,6 @@ describe('error handling', () => {
             expect(res.body.msg).to.equal('User Not Found');
           });
       });
-      it.only('get request for non-existant topic responds with status 404 and a not found error message.', () => {
-        return request(app)
-          .get('/api/topics/notatopic')
-          .expect(404)
-          .then((res) => {
-            expect(res.body.msg).to.equal('Topic Not Found');
-          });
-      });
     });
   });
 });
