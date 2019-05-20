@@ -371,6 +371,14 @@ describe('error handling', () => {
             expect(res.body.msg).to.equal('Method Not Allowed');
           });
       });
+      it.only('get request responds with status 404 and a not found error message.', () => {
+        return request(app)
+          .get('/api/users/butter_bean')
+          .expect(404)
+          .then((res) => {
+            expect(res.body.msg).to.equal('Not Found');
+          });
+      });
     });
   });
 });
@@ -378,7 +386,7 @@ describe('error handling', () => {
 describe('', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
-  it.only('get request responds with status 200 and an array of article data sorted by votes', () => {
+  it('get request responds with status 200 and an array of article data sorted by votes', () => {
     return request(app)
       .get('/api/articles/?sort_by=votes')
       .expect(200)
@@ -387,7 +395,7 @@ describe('', () => {
         expect(res.body.articles[0]).to.contain.keys('article_id', 'body');
       });
   });
-  it.only('get request responds with status 200 and an array of article data sorted by comment count', () => {
+  it('get request responds with status 200 and an array of article data sorted by comment count', () => {
     return request(app)
       .get('/api/articles/?sort_by=comment_count')
       .expect(200)

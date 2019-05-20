@@ -8,7 +8,6 @@ const {
 } = require('../models/articlesModels');
 
 exports.sendArticles = (req, res, next) => {
-  console.log(req.query);
   return getArticles(req.query)
     .then((articles) => {
       articles;
