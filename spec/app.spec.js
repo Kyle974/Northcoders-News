@@ -376,7 +376,7 @@ describe('error handling', () => {
           .get('/api/users/butter_bean')
           .expect(404)
           .then((res) => {
-            expect(res.body.msg).to.equal('Not Found');
+            expect(res.body.msg).to.equal('User Not Found');
           });
       });
     });
